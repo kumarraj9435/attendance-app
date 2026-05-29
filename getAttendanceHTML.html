@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#4F46E5">
+<link rel="manifest" href="?page=manifest">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+<title>Unigen Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}body{margin:0;min-height:100%;font-family:"Nunito",sans-serif;background:#4F46E5}
+.shell{min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.topbar{width:100%;background:#4F46E5;padding:16px 18px 12px;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{color:#fff;font-size:17px;font-weight:900;margin:0 0 2px}.topbar p{color:rgba(255,255,255,.7);font-size:11px;margin:0;font-weight:600}
+.lbtn{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.body{width:100%;background:#F5F6FA;flex:1;padding:12px}
+@media(min-width:500px){.body{max-width:460px;margin:0 auto;border-radius:18px 18px 0 0}}
+.locbar{display:flex;align-items:center;gap:8px;border-radius:11px;padding:11px 14px;margin-bottom:12px;font-size:12px;font-weight:700;flex-wrap:wrap}
+.locbar.ok{background:#DCFCE7;border:1.5px solid #86EFAC;color:#166534}.locbar.err{background:#FEE2E2;border:1.5px solid #FECACA;color:#991B1B}.locbar.chk{background:#DBEAFE;border:1.5px solid #93C5FD;color:#1E40AF}
+.locdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}.locdot.ok{background:#16A34A}.locdot.err{background:#DC2626}.locdot.chk{background:#3B82F6;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.retrybtn{background:#1E40AF;color:#fff;border:none;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;font-family:inherit}
+.fg{margin-bottom:10px}.lbl{font-size:10px;font-weight:800;color:#6B7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+input[type=number]{width:100%;padding:13px;border:2px solid #E5E7EB;border-radius:11px;font-size:28px;font-weight:900;letter-spacing:10px;outline:none;color:#111;background:#fff;-webkit-appearance:none;text-align:center;font-family:inherit}
+input:focus{border-color:#4F46E5;box-shadow:0 0 0 3px rgba(79,70,229,.12)}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
+.hint{font-size:11px;color:#9CA3AF;text-align:center;margin-top:4px;font-weight:600}
+.fv{background:#fff;border:2px solid #E5E7EB;border-radius:11px;padding:11px 14px;font-size:14px;font-weight:700;color:#111}
+.btn{width:100%;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;margin-top:7px;font-family:inherit;transition:transform .1s}.btn:active{transform:scale(.98)}
+.btn.primary{background:#4F46E5;color:#fff}.btn.out{background:#D97706;color:#fff}.btn.done{background:#16A34A;color:#fff}.btn.secondary{background:#fff;color:#6B7280;border:2px solid #E5E7EB}
+.btn:disabled{background:#D1D5DB;color:#9CA3AF;cursor:not-allowed}
+.msg{border-radius:11px;padding:12px;font-size:12px;margin-top:9px;text-align:center;font-weight:700}.msg.ok{background:#DCFCE7;color:#166534;border:1.5px solid #86EFAC}.msg.err{background:#FEE2E2;color:#991B1B;border:1.5px solid #FECACA}
+.spin{display:inline-block;width:14px;height:14px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}@keyframes sp{to{transform:rotate(360deg)}}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px}
+.tc{background:#fff;border:2px solid #E5E7EB;border-radius:11px;padding:11px 13px}.tl{font-size:9px;font-weight:800;color:#9CA3AF;text-transform:uppercase;margin-bottom:4px}.tv{font-size:12px;font-weight:800;color:#111}
+.badge{display:inline-block;padding:2px 9px;border-radius:18px;font-size:10px;font-weight:800;margin-top:5px}.b-in{background:#DCFCE7;color:#166534}.b-out{background:#FEF9C3;color:#854D0E}.b-no{background:#F3F4F6;color:#9CA3AF}
+hr{border:none;border-top:2px solid #E5E7EB;margin:11px 0}
+.lockbanner{background:#FEF3C7;border:2px solid #FCD34D;border-radius:11px;padding:11px 13px;margin-bottom:11px;font-size:12px;color:#92400E;font-weight:700;line-height:1.5}
+.swrap{text-align:center;padding:24px 14px 18px}.sicon{font-size:64px;margin-bottom:8px}.swrap h2{font-size:20px;font-weight:900;color:#111;margin-bottom:6px}.swrap p{font-size:13px;color:#6B7280;font-weight:600}
+.sdet{background:#fff;border:2px solid #E5E7EB;border-radius:13px;padding:14px;margin-top:12px;font-size:13px;color:#374151;line-height:2;text-align:left;font-weight:600}.sdet strong{color:#111;font-weight:800}
+.alert-late,.alert-early{background:#FFCCCC;border:2px solid #CC0000;border-radius:12px;padding:12px 14px;margin-top:10px;display:flex;gap:9px}
+.alert-half{background:#FFF3CD;border:2px solid #D97706;border-radius:12px;padding:12px 14px;margin-top:10px;display:flex;gap:9px}
+.al-icon{font-size:22px;flex-shrink:0}.al-title{font-size:13px;font-weight:900;margin-bottom:2px}.al-sub{font-size:11px;font-weight:700;line-height:1.5}
+.alert-late .al-title,.alert-early .al-title{color:#CC0000}.alert-half .al-title{color:#92400E}.alert-late .al-sub,.alert-early .al-sub{color:#990000}.alert-half .al-sub{color:#78350F}
+/* Performance */
+.hero{background:linear-gradient(135deg,#1E1B4B,#4F46E5);border-radius:16px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.hero-av{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;border:2px solid rgba(255,255,255,.25)}
+.hero-info h2{color:#fff;font-size:15px;font-weight:900;margin:0 0 2px}.hero-info p{color:rgba(255,255,255,.6);font-size:10px;font-weight:600;margin:0}
+.hero-badge{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.2);border-radius:7px;padding:2px 9px;font-size:10px;font-weight:800;color:#fff;margin-top:4px;display:inline-block}
+.pstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
+.ps{background:#fff;border-radius:11px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.ps-icon{font-size:18px;margin-bottom:3px}.ps-val{font-size:24px;font-weight:900;line-height:1}.ps-lbl{font-size:8px;font-weight:800;color:#6B7280;text-transform:uppercase;margin-top:2px}
+.ps-green .ps-val{color:#15803D}.ps-red .ps-val{color:#B91C1C}.ps-orange .ps-val{color:#B45309}.ps-purple .ps-val{color:#6D28D9}.ps-yellow .ps-val{color:#92400E}.ps-blue .ps-val{color:#0369A1}
+.pct-card{background:#fff;border-radius:13px;padding:13px 15px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.pct-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.pct-lbl{font-size:11px;font-weight:800;color:#374151}.pct-num{font-size:26px;font-weight:900}
+.pct-high{color:#15803D}.pct-med{color:#B45309}.pct-low{color:#B91C1B}
+.bar-track{width:100%;height:9px;background:#F3F4F6;border-radius:5px;overflow:hidden}.bar-fill{height:100%;border-radius:5px;transition:width .8s ease}
+.bar-high{background:linear-gradient(90deg,#16A34A,#4ADE80)}.bar-med{background:linear-gradient(90deg,#D97706,#FCD34D)}.bar-low{background:linear-gradient(90deg,#DC2626,#FCA5A5)}
+.pct-sub{font-size:10px;color:#9CA3AF;margin-top:5px;font-weight:600}
+.info-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.pinfo{background:#fff;border-radius:11px;padding:10px 13px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.pinfo-lbl{font-size:9px;font-weight:800;color:#9CA3AF;text-transform:uppercase;margin-bottom:3px}.pinfo-val{font-size:17px;font-weight:900;color:#111}.pinfo-sub{font-size:9px;color:#9CA3AF;font-weight:600;margin-top:2px}
+.trend-card{background:#fff;border-radius:13px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.trend-lbl{font-size:9px;font-weight:800;color:#6B7280;text-transform:uppercase;margin-bottom:7px}
+.tdots{display:flex;gap:4px;flex-wrap:wrap}
+.td{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+.td.tp{background:#DCFCE7;color:#16A34A}.td.ta{background:#FEE2E2;color:#DC2626}.td.th{background:#FEF9C3;color:#D97706}.td.tl{background:#FFCCCC;color:#CC0000}
+.st-card{border-radius:13px;padding:12px 14px;margin-bottom:10px}
+.st-card.sg{background:#DCFCE7;border:2px solid #86EFAC}.st-card.sy{background:#FEF9C3;border:2px solid #FCD34D}.st-card.sr{background:#FEE2E2;border:2px solid #FECACA}
+.st-title{font-size:14px;font-weight:900;margin-bottom:3px}.sg .st-title{color:#15803D}.sy .st-title{color:#854D0E}.sr .st-title{color:#991B1B}
+.st-msg{font-size:11px;font-weight:700;line-height:1.5}.sg .st-msg{color:#166534}.sy .st-msg{color:#92400E}.sr .st-msg{color:#B91C1B}
+.skel{background:linear-gradient(90deg,#F3F4F6 25%,#E5E7EB 50%,#F3F4F6 75%);background-size:200% 100%;animation:shm 1.4s infinite;border-radius:10px;height:16px;margin-bottom:7px}@keyframes shm{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body>
+<div class="shell">
+<!-- Content injected by JavaScript -->
+<div id="app"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  UNIGEN ATTENDANCE PWA — V5.1
+//  Performance on 1st of month only
+//  Mobile-first, fast geolocation
+// ════════════════════════════════════════════════════════
+var emp={},uLat=null,uLng=null,locOk=false;
+var OLat=28.6812156,OLng=77.017456,MaxD=100;
+var IS_FIRST = (new Date().getDate() === 1);
+
+// ── PWA Install ──
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;showInstallBtn();});
+function showInstallBtn(){var b=document.getElementById('installBtn');if(b)b.style.display='block';}
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;var b=document.getElementById('installBtn');if(b)b.style.display='none';});}}
+
+// ── Device/Lock ──
+function gDI(){var d=localStorage.getItem("attDI");if(!d){d="D-"+Math.random().toString(36).substr(2,8).toUpperCase()+Date.now().toString(36);localStorage.setItem("attDI",d);}return d;}
+function gLk(){return{code:localStorage.getItem("lkC"),name:localStorage.getItem("lkN")};}
+function sLk(c,n){localStorage.setItem("lkC",c);localStorage.setItem("lkN",n);}
+function cLk(){localStorage.removeItem("lkC");localStorage.removeItem("lkN");}
+
+// ── Geo (FAST) ──
+function dist(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180,x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)*Math.sin(dl/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
+var geoOK=false,geoTry=0;
+function chkLoc(){geoOK=false;geoTry=0;setLocUI("chk","📍 Detecting...");if(!navigator.geolocation){setLocUI("err","❌ No GPS");return;}tryFast();}
+function tryFast(){navigator.geolocation.getCurrentPosition(onGeo,function(){tryHigh();},{enableHighAccuracy:false,timeout:3000,maximumAge:30000});}
+function tryHigh(){navigator.geolocation.getCurrentPosition(onGeo,onFail,{enableHighAccuracy:true,timeout:5000,maximumAge:10000});}
+function onGeo(p){if(geoOK)return;geoOK=true;uLat=p.coords.latitude;uLng=p.coords.longitude;var dm=Math.round(dist(uLat,uLng,OLat,OLng));if(dm<=MaxD){locOk=true;setLocUI("ok","✅ Office ("+dm+"m)");enableLogin();navigator.geolocation.getCurrentPosition(function(p2){uLat=p2.coords.latitude;uLng=p2.coords.longitude;var d2=Math.round(dist(uLat,uLng,OLat,OLng));if(d2<=MaxD)setLocUI("ok","✅ Office ("+d2+"m precise)");else{locOk=false;disableLogin();setLocUI("err","⚠ Precise: "+d2+"m door");}},function(){},{enableHighAccuracy:true,timeout:7000,maximumAge:0});}else{locOk=false;setLocUI("err","⚠ "+dm+"m door — Office mein aao");addRB();}}
+function onFail(e){if(geoOK)return;geoTry++;if(geoTry<3){setLocUI("chk","📍 Retry #"+geoTry+"...");setTimeout(tryHigh,500);return;}geoOK=true;setLocUI("err",e.code===1?"⚠ Location blocked! Allow karein":"⚠ Location error");addRB();}
+function setLocUI(st,msg){var el=document.getElementById("locBar");if(el)el.className="locbar "+st,el.innerHTML='<div class="locdot '+st+'"></div><span>'+msg+'</span>';}
+function addRB(){var el=document.getElementById("locBar");if(el&&!el.querySelector(".retrybtn"))el.innerHTML+=' <button class="retrybtn" onclick="chkLoc()">🔄 Retry</button>';}
+function enableLogin(){var b=document.getElementById("loginBtn");if(b)b.disabled=false;}
+function disableLogin(){var b=document.getElementById("loginBtn");if(b)b.disabled=true;}
+
+// ── Render App ──
+function renderApp(){
+  document.getElementById("app").innerHTML = getLoginHTML();
+  chkLoc();showLB();
+}
+
+function getLoginHTML(){
+  return '<div class="topbar"><div><h1>Unigen Attendance</h1><p>📱 QR 2026</p></div>'
+  +'<button id="installBtn" class="lbtn" onclick="installApp()" style="display:none">📲 Install</button></div>'
+  +'<div class="body">'
+  +'<div id="locBar" class="locbar chk"><div class="locdot chk"></div><span>📍 Detecting...</span></div>'
+  +'<div id="lockBanner" style="display:none"></div>'
+  +'<div class="fg"><div class="lbl">🔢 Employee Code (Last 2 Digits)</div>'
+  +'<input type="number" id="codeIn" min="1" max="99" inputmode="numeric" oninput="if(this.value.length>2)this.value=this.value.slice(0,2)"/>'
+  +'<div class="hint">Example: UG0008 → sirf <strong>08</strong></div></div>'
+  +'<button class="btn primary" id="loginBtn" onclick="doLookup()" disabled>'+(IS_FIRST?'📊 Performance & Attendance →':'✅ Attendance Lagao →')+'</button>'
+  +'<div id="loginMsg"></div>'
+  +'</div>';
+}
+
+function showLB(){var lk=gLk(),el=document.getElementById("lockBanner");if(!el)return;if(lk.code){el.style.display="block";el.className="lockbanner";el.innerHTML="🔒 <strong>"+lk.name+"</strong> ("+lk.code+") checked-in. Pehle Check-Out karein.";}else el.style.display="none";}
+function showMsg(id,t,c){var el=document.getElementById(id);if(el)el.innerHTML='<div class="msg '+c+'">'+t+'</div>';}
+
+// ── LOOKUP ──
+function doLookup(){
+  if(!locOk){showMsg("loginMsg","⚠ Office pe aao","err");return;}
+  var code=document.getElementById("codeIn").value.trim();
+  if(!code){showMsg("loginMsg","Code dalo","err");return;}
+  var lk=gLk();if(lk.code&&lk.code.slice(-2)!==code.padStart(2,"0")){showMsg("loginMsg","⚠ "+lk.name+" pehle se checked-in","err");return;}
+  var btn=document.getElementById("loginBtn");btn.innerHTML='<span class="spin"></span>Loading...';btn.disabled=true;
+  google.script.run.withSuccessHandler(function(r){
+    btn.innerHTML=IS_FIRST?'📊 Performance & Attendance →':'✅ Attendance Lagao →';btn.disabled=false;
+    if(!r.success){if(r.deviceLocked){sLk(r.lockedCode,r.lockedName);showLB();}showMsg("loginMsg",r.msg,"err");return;}
+    emp=r;
+    if(IS_FIRST){showPerfScreen();}else{showAttForm();}
+  }).withFailureHandler(function(e){btn.innerHTML=IS_FIRST?'📊 Performance & Attendance →':'✅ Attendance Lagao →';btn.disabled=false;showMsg("loginMsg",e.message,"err");}).lookupEmployee(code,gDI());
+}
+
+// ── PERFORMANCE SCREEN (1st of month only) ──
+function showPerfScreen(){
+  document.getElementById("app").innerHTML='<div class="topbar"><div><h1>'+emp.name+'</h1><p>📊 Monthly Performance</p></div><button class="lbtn" onclick="doLogout()">←</button></div>'
+  +'<div class="body"><div id="perfLoad"><div class="skel" style="height:60px;border-radius:12px;margin-bottom:8px"></div><div class="skel" style="height:45px;border-radius:12px"></div></div><div id="perfData" style="display:none"></div>'
+  +'<button class="btn primary" onclick="showAttForm()" style="margin-top:10px">✅ Attendance Lagao →</button>'
+  +'<button class="btn secondary" onclick="doLogout()" style="margin-top:8px">← Back</button></div>';
+  google.script.run.withSuccessHandler(function(d){
+    document.getElementById("perfLoad").style.display="none";
+    var el=document.getElementById("perfData");el.style.display="block";
+    if(!d||!d.success){el.innerHTML='<div class="st-card sy"><div class="st-title">⚠ Data unavailable</div><div class="st-msg">Attendance laga sakte hain</div></div>';return;}
+    el.innerHTML=buildPerfHTML(d);
+    setTimeout(function(){var bar=document.getElementById("pctBar");if(bar)bar.style.width=Math.min(d.attendancePct,100)+"%";},150);
+  }).withFailureHandler(function(){
+    document.getElementById("perfLoad").style.display="none";
+    document.getElementById("perfData").style.display="block";
+    document.getElementById("perfData").innerHTML='<div class="st-card sy"><div class="st-title">⚠ Error</div><div class="st-msg">Data load nahi hua. Attendance laga sakte hain.</div></div>';
+  }).getEmployeePerformance(emp.code,null,null);
+}
+
+function buildPerfHTML(d){
+  var pct=d.attendancePct,pctCls=pct>=90?"pct-high":pct>=75?"pct-med":"pct-low",barCls=pct>=90?"bar-high":pct>=75?"bar-med":"bar-low";
+  var ini=emp.name.split(" ").map(function(w){return w[0]||"";}).join("").substr(0,2).toUpperCase();
+  var html='<div class="hero"><div class="hero-av">'+ini+'</div><div class="hero-info"><h2>'+d.employee.name+'</h2><p>'+d.employee.code+(d.employee.designation?' | '+d.employee.designation:'')+'</p><div class="hero-badge">'+pct+'% | '+d.present+'/'+d.totalWorkingDays+' Days | '+d.monthName+'</div></div></div>';
+  html+='<div class="pstats"><div class="ps ps-green"><div class="ps-icon">✅</div><div class="ps-val">'+d.present+'</div><div class="ps-lbl">Present</div></div><div class="ps ps-red"><div class="ps-icon">❌</div><div class="ps-val">'+d.absent+'</div><div class="ps-lbl">Absent</div></div><div class="ps ps-orange"><div class="ps-icon">⏰</div><div class="ps-val">'+d.late+'</div><div class="ps-lbl">Late</div></div><div class="ps ps-purple"><div class="ps-icon">🏃</div><div class="ps-val">'+d.earlyOut+'</div><div class="ps-lbl">Early</div></div><div class="ps ps-yellow"><div class="ps-icon">🟡</div><div class="ps-val">'+d.halfDay+'</div><div class="ps-lbl">Half</div></div><div class="ps ps-blue"><div class="ps-icon">⏱</div><div class="ps-val">'+d.totalHrs+'h</div><div class="ps-lbl">Hours</div></div></div>';
+  html+='<div class="pct-card"><div class="pct-top"><div class="pct-lbl">📊 Attendance</div><div class="pct-num '+pctCls+'">'+pct+'%</div></div><div class="bar-track"><div class="bar-fill '+barCls+'" id="pctBar" style="width:0%"></div></div><div class="pct-sub">On-time: '+d.onTimePct+'% | Full days: '+d.fullDays+'</div></div>';
+  html+='<div class="info-row"><div class="pinfo"><div class="pinfo-lbl">🔥 Streak</div><div class="pinfo-val">'+d.currentStreak+'</div><div class="pinfo-sub">Max: '+d.maxStreak+'</div></div><div class="pinfo"><div class="pinfo-lbl">⏱ Avg/Day</div><div class="pinfo-val">'+d.avgHrsPerDay+'h</div><div class="pinfo-sub">Total: '+d.totalHrs+'h</div></div></div>';
+  // Trend
+  html+='<div class="trend-card"><div class="trend-lbl">📅 Last 10 Days</div><div class="tdots">';
+  if(d.last10Days)d.last10Days.forEach(function(day){var cls=day.status==="absent"?"ta":day.flags.indexOf("halfday")>=0?"th":day.flags.indexOf("late")>=0?"tl":"tp";html+='<div class="td '+cls+'" title="'+day.date+'">'+day.date.substr(0,2)+'</div>';});
+  html+='</div></div>';
+  // Status
+  var stCls=pct>=90?"sg":pct>=75?"sy":"sr",stTitle=pct>=90?"✅ Excellent!":pct>=75?"👍 Good":"⚠ Improve Karo!";
+  var stMsg=pct>=90?"Keep it up! 🎉":"Present:"+d.present+"/"+d.totalWorkingDays+(d.late>2?" | Late:"+d.late:"")+(d.absent>2?" | Absent:"+d.absent:"");
+  html+='<div class="st-card '+stCls+'"><div class="st-title">'+stTitle+'</div><div class="st-msg">'+stMsg+'</div></div>';
+  return html;
+}
+
+// ── ATTENDANCE FORM ──
+function showAttForm(){
+  var r=emp;
+  var checkedBoth=r.checkedIn&&r.checkedOut,checkedInOnly=r.checkedIn&&!r.checkedOut;
+  var btnTxt=checkedBoth?"Complete ✓":checkedInOnly?"Check Out →":"Check In →";
+  var btnCls=checkedBoth?"btn done":checkedInOnly?"btn out":"btn primary";
+  var btnDis=checkedBoth?"disabled":"";
+  document.getElementById("app").innerHTML='<div class="topbar"><div><h1>Attendance</h1><p>'+r.code+'</p></div><button class="lbtn" onclick="doLogout()">Logout</button></div>'
+  +'<div class="body">'
+  +'<div class="fg"><div class="lbl">👤 Name</div><div class="fv">'+r.name+'</div></div>'
+  +'<div class="fg"><div class="lbl">💾 Code</div><div class="fv">'+r.code+'</div></div>'
+  +'<div class="fg"><div class="lbl">🔑 UC</div><div class="fv">'+(r.uc||'—')+'</div></div>'
+  +'<div class="fg"><div class="lbl">📧 Email</div><div class="fv">'+(r.email||'N/A')+'</div></div>'
+  +'<hr>'
+  +'<div class="tgrid">'
+  +'<div class="tc"><div class="tl">🕐 In</div><div class="tv">'+(r.timeIn||'—')+'</div><div>'+(r.checkedIn?'<span class="badge b-in">✓</span>':'<span class="badge b-no">—</span>')+'</div></div>'
+  +'<div class="tc"><div class="tl">🕑 Out</div><div class="tv">'+(r.timeOut||'—')+'</div><div>'+(r.checkedOut?'<span class="badge b-out">✓</span>':'<span class="badge b-no">—</span>')+'</div></div>'
+  +'</div>'
+  +'<button class="'+btnCls+'" id="attBtn" onclick="doAtt()" '+btnDis+'>'+btnTxt+'</button>'
+  +'<div id="attMsg"></div>'
+  +'</div>';
+  if(checkedBoth)cLk();
+  if(checkedInOnly)sLk(r.code,r.name);
+}
+
+// ── RECORD ──
+function doAtt(){
+  if(!locOk){showMsg("attMsg","⚠ Office se bahar!","err");return;}
+  var btn=document.getElementById("attBtn");btn.innerHTML='<span class="spin"></span>Saving...';btn.disabled=true;
+  google.script.run.withSuccessHandler(function(r){
+    if(!r.success){showMsg("attMsg",r.msg,"err");btn.disabled=false;btn.innerHTML=emp.checkedIn?"Check Out →":"Check In →";return;}
+    showSuccess(r);
+  }).withFailureHandler(function(e){showMsg("attMsg",e.message,"err");btn.disabled=false;btn.innerHTML=emp.checkedIn?"Check Out →":"Check In →";}).recordAttendance(emp.code,uLat,uLng,gDI());
+}
+
+function showSuccess(r){
+  var icon=r.action==="in"?"✅":"🏁",title=r.action==="in"?"Check In Done!":"Check Out Done!";
+  if(r.action==="in")sLk(emp.code,emp.name);else cLk();
+  var det="<strong>Name:</strong> "+emp.name+"<br><strong>Code:</strong> "+emp.code+"<br><strong>Date:</strong> "+r.date+"<br>";
+  det+=r.action==="in"?"<strong>Time In:</strong> "+r.time:"<strong>In:</strong> "+r.timeIn+"<br><strong>Out:</strong> "+r.time+"<br><strong>Total:</strong> "+r.duration+" hrs";
+  var alerts="";
+  if(r.isHalfDay)alerts+='<div class="alert-half"><div class="al-icon">🟡</div><div><div class="al-title">Half Day</div><div class="al-sub">'+(r.action==="in"?"11:30–2PM check-in":"5PM se pehle checkout")+'</div></div></div>';
+  if(r.isLate)alerts+='<div class="alert-late"><div class="al-icon">⏰</div><div><div class="al-title">Late!</div><div class="al-sub">'+r.lateBy+' late</div></div></div>';
+  if(r.isEarly&&!r.isHalfDay)alerts+='<div class="alert-early"><div class="al-icon">🏃</div><div><div class="al-title">Early!</div><div class="al-sub">'+r.earlyBy+' pehle</div></div></div>';
+  document.getElementById("app").innerHTML='<div class="topbar"><div><h1>Attendance</h1><p>Done</p></div></div><div class="body"><div class="swrap"><div class="sicon">'+icon+'</div><h2>'+title+'</h2><p>'+emp.name+'</p><div class="sdet">'+det+'</div>'+alerts+'<button class="btn primary" style="margin-top:16px" onclick="doLogout()">Done / Logout</button></div></div>';
+}
+
+function doLogout(){emp={};renderApp();}
+
+// ── Init ──
+window.onload=function(){renderApp();};
+</script>
+</body>
+</html>
